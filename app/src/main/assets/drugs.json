@@ -1,0 +1,81 @@
+[
+  {
+    "id": "ivermectina",
+    "name": "Ivermectina",
+    "indications": [
+      {
+        "name": "Scabbia",
+        "calculation_type": "WEIGHT_BASED",
+        "dose_per_unit": 200,
+        "unit": "mcg/kg",
+        "max_dose": 15000,
+        "pharmaceutical_form": "Compresse 3mg",
+        "form_multiplier": 3000,
+        "notes": "Dose singola da ripetere dopo 7-14 giorni."
+      }
+    ]
+  },
+  {
+    "id": "ciclosporina",
+    "name": "Ciclosporina",
+    "indications": [
+      {
+        "name": "Psoriasi grave",
+        "calculation_type": "WEIGHT_BASED",
+        "dose_per_unit": 2.5,
+        "unit": "mg/kg",
+        "max_dose": 5.0,
+        "pharmaceutical_form": "Capsule 25mg/50mg/100mg",
+        "notes": "Dose giornaliera suddivisa in due somministrazioni."
+      }
+    ]
+  },
+  {
+    "id": "methotrexate",
+    "name": "Methotrexate",
+    "indications": [
+      {
+        "name": "Psoriasi (Dosaggio BSA)",
+        "calculation_type": "BSA_BASED",
+        "dose_per_unit": 15,
+        "unit": "mg/m²",
+        "max_dose": 25,
+        "pharmaceutical_form": "Compresse 2.5mg / Fiale",
+        "notes": "Somministrazione una volta a settimana."
+      }
+    ]
+  },
+  {
+    "id": "cetirizina",
+    "name": "Cetirizina",
+    "indications": [
+      {
+        "name": "Orticaria",
+        "calculation_type": "FIXED_DOSE",
+        "fixed_dose": 10,
+        "unit": "mg",
+        "pharmaceutical_form": "Compresse 10mg",
+        "notes": "Una volta al giorno."
+      }
+    ]
+  },
+  {
+    "id": "prednisone_brackets",
+    "name": "Prednisone (Fasce)",
+    "indications": [
+      {
+        "name": "Terapia d'urto pediatrica",
+        "calculation_type": "WEIGHT_BRACKETS",
+        "unit": "mg",
+        "brackets": [
+          { "min_weight": 0, "max_weight": 10, "dose": 5 },
+          { "min_weight": 10, "max_weight": 20, "dose": 10 },
+          { "min_weight": 20, "max_weight": 40, "dose": 20 },
+          { "min_weight": 40, "max_weight": 1000, "dose": 50 }
+        ],
+        "pharmaceutical_form": "Compresse / Gocce",
+        "notes": "Esempio di dosaggio a fasce di peso."
+      }
+    ]
+  }
+]
