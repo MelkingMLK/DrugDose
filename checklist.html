@@ -1,0 +1,533 @@
+
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap & Task Division - Progetto DrugDose (PDM 2025/2026)</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-dev1: #38bdf8;
+            --accent-dev2: #a855f7;
+            --accent-shared: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 24px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .toolbar {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .progress-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 10px;
+            background: #334155;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-dev1), var(--accent-dev2));
+            transition: width 0.3s ease;
+        }
+
+        .btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-sync {
+            background: #059669;
+        }
+
+        .btn-sync:hover {
+            background: #047857;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .column {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            border-bottom: 2px solid;
+        }
+
+        .col-dev1 .column-header { border-color: var(--accent-dev1); }
+        .col-dev2 .column-header { border-color: var(--accent-dev2); }
+        .col-shared .column-header { border-color: var(--accent-shared); }
+
+        .column-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .col-dev1 .column-title { color: var(--accent-dev1); }
+        .col-dev2 .column-title { color: var(--accent-dev2); }
+        .col-shared .column-title { color: var(--accent-shared); }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #334155;
+            color: var(--text-secondary);
+        }
+
+        .task-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .task-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .task-main input[type="checkbox"] {
+            margin-top: 4px;
+            cursor: pointer;
+            accent-color: var(--accent-shared);
+            width: 16px;
+            height: 16px;
+        }
+
+        .task-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .task-card.completed .task-label {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .task-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-left: 26px;
+        }
+
+        .task-meta {
+            margin-left: 26px;
+            display: flex;
+            gap: 8px;
+            font-size: 0.75rem;
+        }
+
+        .tag {
+            background: #1e1e38;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #3b3b5c;
+            color: #cbd5e1;
+        }
+
+        .notice {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #fde68a;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Progetto 2: DrugDose — Dermatologia</h1>
+        <div class="subtitle">Programmazione di Dispositivi Mobili (Prof. Ignazio Gallo) | Durata: 2 Settimane</div>
+    </header>
+
+    <div class="notice">
+        <strong>Meccanismo di Sincronizzazione Git:</strong> I browser non possono scrivere direttamente sui file locali senza server. Quando spuntate le checkbox, lo stato viene salvato nel <code>localStorage</code> del browser locale. Per sincronizzare le spunte con il repository remoto, cliccate <strong>"Esporta file aggiornato per Git Push"</strong>, sostituite questo <code>index.html</code> nel repository, e fate <code>git add . && git commit -m "update tasks" && git push</code>. In questo modo entrambi vedrete lo stato sincronizzato all'ultimo pull!
+    </div>
+
+    <div class="toolbar">
+        <div class="progress-box">
+            <span style="font-size: 0.85rem; font-weight: 600;">Completamento Globale:</span>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <span id="progressText" style="font-size: 0.85rem; font-weight: 600;">0%</span>
+        </div>
+        <button class="btn btn-sync" onclick="exportUpdatedHtml()">⬇️ Esporta file aggiornato per Git Push</button>
+    </div>
+
+    <div class="grid">
+        <!-- COLONNA SVILUPPATORE 1 -->
+        <div class="column col-dev1">
+            <div class="column-header">
+                <span class="column-title">Dev 1: Signorino Melnyk</span>
+                <span class="badge">Dati & Logica Clinica</span>
+            </div>
+
+            <!-- Task 1.1 -->
+            <div class="task-card" id="card_t1_1">
+                <div class="task-main">
+                    <input type="checkbox" id="t1_1" onchange="toggleTask('t1_1')">
+                    <label for="t1_1" class="task-label">Dataset JSON Farmaci Dermatologici</label>
+                </div>
+                <div class="task-desc">Definizione di <code>assets/drugs.json</code> con fonti cliniche reali (AIFA/RCP/BNF/WHO). Includere Ivermectina (200 µg/kg), farmaci a BSA (mg/m²), dosi fisse e dosi a fasce.</div>
+                <div class="task-meta">
+                    <span class="tag">JSON</span>
+                    <span class="tag">Data Modeling</span>
+                </div>
+            </div>
+
+            <!-- Task 1.2 -->
+            <div class="task-card" id="card_t1_2">
+                <div class="task-main">
+                    <input type="checkbox" id="t1_2" onchange="toggleTask('t1_2')">
+                    <label for="t1_2" class="task-label">Kotlin Data Classes & JSON Parsing</label>
+                </div>
+                <div class="task-desc">Creazione del modello dati (<code>Drug</code>, <code>TherapeuticRule</code>, <code>WeightBracket</code>, <code>FormulaType</code>) e deserializzazione da asset locali via parser robusto.</div>
+                <div class="task-meta">
+                    <span class="tag">Data Class</span>
+                    <span class="tag">Parsing</span>
+                </div>
+            </div>
+
+            <!-- Task 1.3 -->
+            <div class="task-card" id="card_t1_3">
+                <div class="task-main">
+                    <input type="checkbox" id="t1_3" onchange="toggleTask('t1_3')">
+                    <label for="t1_3" class="task-label">Engine di Calcolo Matematico</label>
+                </div>
+                <div class="task-desc">Implementazione delle 4 tipologie di calcolo: Peso (mg/kg, µg/kg), BSA con Formula di Mosteller (<code>sqrt(h*w/3600)</code>), Dose Fissa e Fasce di peso.</div>
+                <div class="task-meta">
+                    <span class="tag">Math Logic</span>
+                    <span class="tag">Mosteller BSA</span>
+                </div>
+            </div>
+
+            <!-- Task 1.4 -->
+            <div class="task-card" id="card_t1_4">
+                <div class="task-main">
+                    <input type="checkbox" id="t1_4" onchange="toggleTask('t1_4')">
+                    <label for="t1_4" class="task-label">Logica di Arrotondamento & Limiti Clinici</label>
+                </div>
+                <div class="task-desc">Algoritmo per calcolo forma farmaceutica (es. numero compresse/frazioni), clamping su dose massima ammissibile e generazione alert vincoli (min/max peso/età).</div>
+                <div class="task-meta">
+                    <span class="tag">Clinical Safety</span>
+                    <span class="tag">Rounding</span>
+                </div>
+            </div>
+
+            <!-- Task 1.5 -->
+            <div class="task-card" id="card_t1_5">
+                <div class="task-main">
+                    <input type="checkbox" id="t1_5" onchange="toggleTask('t1_5')">
+                    <label for="t1_5" class="task-label">Unit Testing della Logica di Calcolo</label>
+                </div>
+                <div class="task-desc">Test JUnit isolati per verificare la precisione numerica dei calcoli e la corretta generazione degli alert sui casi limite (es. pediatrico vs adulto).</div>
+                <div class="task-meta">
+                    <span class="tag">JUnit</span>
+                    <span class="tag">Testing</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLONNA SVILUPPATORE 2 -->
+        <div class="column col-dev2">
+            <div class="column-header">
+                <span class="column-title">Dev 2: Gianluca</span>
+                <span class="badge">UI, Mockup & Validazione</span>
+            </div>
+
+            <!-- Task 2.1 -->
+            <div class="task-card" id="card_t2_1">
+                <div class="task-main">
+                    <input type="checkbox" id="t2_1" onchange="toggleTask('t2_1')">
+                    <label for="t2_1" class="task-label">Implementazione Schermata Principale (Mockup)</label>
+                </div>
+                <div class="task-desc">Costruzione del layout seguendo le slide: Dropdown/Spinner selezione Farmaco e Indicazione clinica, campi di input per Peso (kg), Altezza (cm) ed Età.</div>
+                <div class="task-meta">
+                    <span class="tag">UI Layout</span>
+                    <span class="tag">Material Design</span>
+                </div>
+            </div>
+
+            <!-- Task 2.2 -->
+            <div class="task-card" id="card_t2_2">
+                <div class="task-main">
+                    <input type="checkbox" id="t2_2" onchange="toggleTask('t2_2')">
+                    <label for="t2_2" class="task-label">Modulo di Validazione Input Rigida</label>
+                </div>
+                <div class="task-desc">Controllo in tempo reale sugli input utente: parsing numerico sicuro (<code>toDoubleOrNull</code>), blocco valori negativi/impossibili, gestione errori con <code>EditText.error</code>.</div>
+                <div class="task-meta">
+                    <span class="tag">Input Validation</span>
+                    <span class="tag">Null Safety</span>
+                </div>
+            </div>
+
+            <!-- Task 2.3 -->
+            <div class="task-card" id="card_t2_3">
+                <div class="task-main">
+                    <input type="checkbox" id="t2_3" onchange="toggleTask('t2_3')">
+                    <label for="t2_3" class="task-label">Card Informativa Dinamica (Formule & Vincoli)</label>
+                </div>
+                <div class="task-desc">Visualizzazione reattiva delle caratteristiche del farmaco selezionato: unità di misura, tipo di formula applicata, alert preventivi e riferimenti alle fonti (RCP/AIFA).</div>
+                <div class="task-meta">
+                    <span class="tag">Reactive UI</span>
+                    <span class="tag">Info Card</span>
+                </div>
+            </div>
+
+            <!-- Task 2.4 -->
+            <div class="task-card" id="card_t2_4">
+                <div class="task-main">
+                    <input type="checkbox" id="t2_4" onchange="toggleTask('t2_4')">
+                    <label for="t2_4" class="task-label">Pannello Risultati & Visual Alert Clinici</label>
+                </div>
+                <div class="task-desc">Sezione grafica dedicata all'output: dose teorica calcolata, forma farmaceutica consigliata (compresse), banner di attenzione/alert per superamento soglie.</div>
+                <div class="task-meta">
+                    <span class="tag">Result View</span>
+                    <span class="tag">Alerts</span>
+                </div>
+            </div>
+
+            <!-- Task 2.5 -->
+            <div class="task-card" id="card_t2_5">
+                <div class="task-main">
+                    <input type="checkbox" id="t2_5" onchange="toggleTask('t2_5')">
+                    <label for="t2_5" class="task-label">Gestione Ciclo di Vita & State Persistence</label>
+                </div>
+                <div class="task-desc">Garantire che la rotazione dello schermo o cambi di configurazione non causino la perdita dei parametri inseriti o dei risultati (ViewModel / SavedState).</div>
+                <div class="task-meta">
+                    <span class="tag">Lifecycle</span>
+                    <span class="tag">ViewModel</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLONNA CONGIUNTA -->
+        <div class="column col-shared">
+            <div class="column-header">
+                <span class="column-title">Integrazione & QA</span>
+                <span class="badge">Insieme (Melnyk & Gianluca)</span>
+            </div>
+
+            <!-- Task S.1 -->
+            <div class="task-card" id="card_ts_1">
+                <div class="task-main">
+                    <input type="checkbox" id="ts_1" onchange="toggleTask('ts_1')">
+                    <label for="ts_1" class="task-label">Definizione del Contratto di Interfaccia</label>
+                </div>
+                <div class="task-desc">Accordo preventivo su metodi e DTO tra il modulo di calcolo (Dev 1) e l'interfaccia/ViewModel (Dev 2) per lavorare in parallelo senza conflitti.</div>
+                <div class="task-meta">
+                    <span class="tag">Architecture</span>
+                    <span class="tag">Contract</span>
+                </div>
+            </div>
+
+            <!-- Task S.2 -->
+            <div class="task-card" id="card_ts_2">
+                <div class="task-main">
+                    <input type="checkbox" id="ts_2" onchange="toggleTask('ts_2')">
+                    <label for="ts_2" class="task-label">Verifica e Validazione Clinica dei Risultati</label>
+                </div>
+                <div class="task-desc">Collaudo con i casi test delle slide (es. Ivermectina 70 kg -> 14 mg; farmaco BSA 170 cm/70 kg -> 91 mg) e test di usabilità complessiva.</div>
+                <div class="task-meta">
+                    <span class="tag">Verification</span>
+                    <span class="tag">Clinical QA</span>
+                </div>
+            </div>
+
+            <!-- Task S.3 -->
+            <div class="task-card" id="card_ts_3">
+                <div class="task-main">
+                    <input type="checkbox" id="ts_3" onchange="toggleTask('ts_3')">
+                    <label for="ts_3" class="task-label">Refactoring & Preparazione Consegna</label>
+                </div>
+                <div class="task-desc">Pulizia del codice Kotlin, eliminazione hardcoding stringhe (<code>res/values/strings.xml</code>), test su emulatore e stesura documentazione finale.</div>
+                <div class="task-meta">
+                    <span class="tag">Clean Code</span>
+                    <span class="tag">Localization</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const TASK_IDS = ['t1_1', 't1_2', 't1_3', 't1_4', 't1_5', 't2_1', 't2_2', 't2_3', 't2_4', 't2_5', 'ts_1', 'ts_2', 'ts_3'];
+
+    // Inizializzazione allo scaricamento / caricamento pagina
+    window.addEventListener('DOMContentLoaded', () => {
+        // Se nel file HTML ci sono checkbox marcate esplicitamente con checked, le rispettiamo.
+        // Altrimenti leggiamo da localStorage per la sessione locale corrente.
+        TASK_IDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const savedLocal = localStorage.getItem('drugdose_task_' + id);
+            if (savedLocal !== null) {
+                el.checked = (savedLocal === 'true');
+            }
+            updateCardVisual(id, el.checked);
+        });
+        updateProgress();
+    });
+
+    function toggleTask(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        localStorage.setItem('drugdose_task_' + id, el.checked);
+        updateCardVisual(id, el.checked);
+        updateProgress();
+    }
+
+    function updateCardVisual(id, isChecked) {
+        const card = document.getElementById('card_' + id);
+        if (card) {
+            if (isChecked) {
+                card.classList.add('completed');
+            } else {
+                card.classList.remove('completed');
+            }
+        }
+    }
+
+    function updateProgress() {
+        let total = TASK_IDS.length;
+        let checkedCount = 0;
+        TASK_IDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.checked) checkedCount++;
+        });
+
+        const pct = Math.round((checkedCount / total) * 100);
+        document.getElementById('progressBar').style.width = pct + '%';
+        document.getElementById('progressText').innerText = pct + '% (' + checkedCount + '/' + total + ')';
+    }
+
+    function exportUpdatedHtml() {
+        // Clona il documento attuale e applica gli attributi 'checked' esatti direttamente nell'HTML
+        let docClone = document.documentElement.cloneNode(true);
+        TASK_IDS.forEach(id => {
+            const originalInput = document.getElementById(id);
+            const targetInput = docClone.querySelector('#' + id);
+            if (originalInput && targetInput) {
+                if (originalInput.checked) {
+                    targetInput.setAttribute('checked', 'checked');
+                } else {
+                    targetInput.removeAttribute('checked');
+                }
+            }
+        });
+
+        const finalHtml = "<!DOCTYPE html>\n" + docClone.outerHTML;
+        const blob = new Blob([finalHtml], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'tasks_drugdose.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+</body>
+</html>
+
+tasks_drugdose.html
+Visualizzazione di tasks_drugdose.html.

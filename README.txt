@@ -1,0 +1,10 @@
+NOTE x BUG FIX E COSE DA FARE
+
+MELNYK
+
+------
+
+MELIS
+
+----
+COMUNICAZIONI
