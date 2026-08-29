@@ -23,6 +23,11 @@ data class Indication(
     val brackets: List<WeightBracket>? = null,
     val pharmaceuticalForm: String? = null,
     val formMultiplier: Double? = null,
+    val roundingStep: Double? = null,
+    val minWeight: Double? = null,
+    val maxWeight: Double? = null,
+    val minAge: Int? = null,
+    val maxAge: Int? = null,
     val notes: String? = null
 )
 

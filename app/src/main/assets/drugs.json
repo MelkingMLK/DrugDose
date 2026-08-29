@@ -11,7 +11,9 @@
         "max_dose": 15000,
         "pharmaceutical_form": "Compresse 3mg",
         "form_multiplier": 3000,
-        "notes": "Dose singola da ripetere dopo 7-14 giorni."
+        "rounding_step": 1.0,
+        "min_weight": 15.0,
+        "notes": "Dose singola da ripetere dopo 7-14 giorni. Non raccomandato sotto i 15kg."
       }
     ]
   },
@@ -24,9 +26,11 @@
         "calculation_type": "WEIGHT_BASED",
         "dose_per_unit": 2.5,
         "unit": "mg/kg",
-        "max_dose": 5.0,
+        "max_dose": 350.0,
         "pharmaceutical_form": "Capsule 25mg/50mg/100mg",
-        "notes": "Dose giornaliera suddivisa in due somministrazioni."
+        "form_multiplier": 25.0,
+        "rounding_step": 1.0,
+        "notes": "Arrotondato alla capsula da 25mg più vicina."
       }
     ]
   },
@@ -40,22 +44,10 @@
         "dose_per_unit": 15,
         "unit": "mg/m²",
         "max_dose": 25,
-        "pharmaceutical_form": "Compresse 2.5mg / Fiale",
-        "notes": "Somministrazione una volta a settimana."
-      }
-    ]
-  },
-  {
-    "id": "cetirizina",
-    "name": "Cetirizina",
-    "indications": [
-      {
-        "name": "Orticaria",
-        "calculation_type": "FIXED_DOSE",
-        "fixed_dose": 10,
-        "unit": "mg",
-        "pharmaceutical_form": "Compresse 10mg",
-        "notes": "Una volta al giorno."
+        "pharmaceutical_form": "Compresse 2.5mg",
+        "form_multiplier": 2.5,
+        "rounding_step": 0.5,
+        "notes": "Arrotondato a mezza compressa (1.25mg)."
       }
     ]
   },
@@ -73,8 +65,11 @@
           { "min_weight": 20, "max_weight": 40, "dose": 20 },
           { "min_weight": 40, "max_weight": 1000, "dose": 50 }
         ],
-        "pharmaceutical_form": "Compresse / Gocce",
-        "notes": "Esempio di dosaggio a fasce di peso."
+        "pharmaceutical_form": "Compresse 5mg",
+        "form_multiplier": 5.0,
+        "rounding_step": 1.0,
+        "max_age": 18,
+        "notes": "Esempio per uso pediatrico (Max 18 anni)."
       }
     ]
   }

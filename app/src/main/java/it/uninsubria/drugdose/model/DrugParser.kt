@@ -59,6 +59,11 @@ class DrugParser(private val context: Context) {
             brackets = if (brackets.isEmpty()) null else brackets,
             pharmaceuticalForm = obj.optString("pharmaceutical_form", null),
             formMultiplier = obj.optDouble("form_multiplier", -1.0).takeIf { it != -1.0 },
+            roundingStep = obj.optDouble("rounding_step", -1.0).takeIf { it != -1.0 },
+            minWeight = obj.optDouble("min_weight", -1.0).takeIf { it != -1.0 },
+            maxWeight = obj.optDouble("max_weight", -1.0).takeIf { it != -1.0 },
+            minAge = obj.optInt("min_age", -1).takeIf { it != -1 },
+            maxAge = obj.optInt("max_age", -1).takeIf { it != -1 },
             notes = obj.optString("notes", null)
         )
     }

@@ -1,5 +1,6 @@
 package it.uninsubria.drugdose.model
 
+import kotlin.math.round
 import kotlin.math.sqrt
 
 object DoseCalculator {
@@ -8,29 +9,34 @@ object DoseCalculator {
         val finalDose: Double,
         val unit: String,
         val pharmaceuticalDose: Double? = null,
+        val roundedPharmaceuticalDose: Double? = null,
         val bsa: Double? = null,
-        val isMaxDoseApplied: Boolean = false
+        val isMaxDoseApplied: Boolean = false,
+        val alerts: List<String> = emptyList()
     )
 
-    /**
-     * Calcola la Superficie Corporea (BSA) utilizzando la formula di Mosteller.
-     * BSA = sqrt((altezza_cm * peso_kg) / 3600)
-     */
     fun calculateBsa(weightKg: Double, heightCm: Double): Double {
         return sqrt((weightKg * heightCm) / 3600.0)
     }
 
-    /**
-     * Calcola la dose in base all'indicazione e ai parametri del paziente.
-     */
     fun calculateDose(
         indication: Indication,
         weightKg: Double,
-        heightCm: Double? = null
+        heightCm: Double? = null,
+        age: Int? = null
     ): CalculationResult {
         var rawDose = 0.0
         var bsa: Double? = null
         var isMaxDoseApplied = false
+        val alerts = mutableListOf<String>()
+
+        indication.minWeight?.let { if (weightKg < it) alerts.add("Peso inferiore al minimo consigliato ($it kg)") }
+        indication.maxWeight?.let { if (weightKg > it) alerts.add("Peso superiore al massimo consigliato ($it kg)") }
+        age?.let { a ->
+            indication.minAge?.let { if (a < it) alerts.add("Età inferiore al minimo consigliato ($it anni)") }
+            indication.maxAge?.let { if (a > it) alerts.add("Età superiore al massimo consigliato ($it anni)") }
+        }
+
 
         when (indication.calculationType) {
             CalculationType.WEIGHT_BASED -> {
@@ -40,43 +46,60 @@ object DoseCalculator {
                 if (heightCm != null) {
                     bsa = calculateBsa(weightKg, heightCm)
                     rawDose = (indication.dosePerUnit ?: 0.0) * bsa
+                } else {
+                    alerts.add("Altezza mancante per calcolo basato su BSA")
                 }
             }
             CalculationType.FIXED_DOSE -> {
                 rawDose = indication.fixedDose ?: 0.0
             }
             CalculationType.WEIGHT_BRACKETS -> {
+                var found = false
                 indication.brackets?.forEach { bracket ->
                     if (weightKg >= bracket.minWeight && weightKg < bracket.maxWeight) {
                         rawDose = bracket.dose
+                        found = true
                     }
                 }
+                if (!found) alerts.add("Peso fuori dalle fasce di dosaggio previste")
             }
         }
 
-        // Applica il limite di dose massima se presente
+
         indication.maxDose?.let { max ->
             if (rawDose > max) {
                 rawDose = max
                 isMaxDoseApplied = true
+                alerts.add("Dose limitata al massimo ammissibile ($max ${indication.unit.split("/")[0]})")
             }
         }
 
-        // Calcolo della forma farmaceutica (es. numero di compresse o ml)
+
         var pharmaceuticalDose: Double? = null
+        var roundedPharmaceuticalDose: Double? = null
+        
         if (indication.formMultiplier != null && indication.formMultiplier != 0.0) {
             pharmaceuticalDose = rawDose / indication.formMultiplier
+            
+
+            val step = indication.roundingStep ?: 0.0
+            roundedPharmaceuticalDose = if (step > 0) {
+                round(pharmaceuticalDose / step) * step
+            } else {
+                pharmaceuticalDose
+            }
         }
 
-        // Pulizia dell'unità (es. da "mcg/kg" a "mcg")
         val baseUnit = indication.unit.split("/")[0]
 
         return CalculationResult(
             finalDose = rawDose,
             unit = baseUnit,
             pharmaceuticalDose = pharmaceuticalDose,
+            roundedPharmaceuticalDose = roundedPharmaceuticalDose,
             bsa = bsa,
-            isMaxDoseApplied = isMaxDoseApplied
+            isMaxDoseApplied = isMaxDoseApplied,
+            alerts = alerts
         )
     }
 }
