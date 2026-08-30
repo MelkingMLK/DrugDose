@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="screen_padding">20dp</dimen>
-    <dimen name="margin_small">8dp</dimen>
-    <dimen name="margin_medium">16dp</dimen>
-    <dimen name="margin_large">24dp</dimen>
+    <!-- Layout Spacing -->
+    <dimen name="spacing_tiny">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_huge">32dp</dimen>
 
-    <dimen name="card_corner_radius">16dp</dimen>
-    <dimen name="card_elevation">4dp</dimen>
-    <dimen name="button_height">56dp</dimen>
+    <dimen name="screen_padding">16dp</dimen>
 
-    <dimen name="text_title">28sp</dimen>
-    <dimen name="text_subtitle">16sp</dimen>
-    <dimen name="text_body">14sp</dimen>
+    <!-- Components -->
+    <dimen name="card_radius">8dp</dimen>
+    <dimen name="input_radius">6dp</dimen>
+    <dimen name="button_radius">6dp</dimen>
+    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="button_height">52dp</dimen>
+
+    <!-- Typography -->
+    <dimen name="text_h1">22sp</dimen>
+    <dimen name="text_h2">18sp</dimen>
+    <dimen name="text_base">16sp</dimen>
+    <dimen name="text_small">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
 </resources>

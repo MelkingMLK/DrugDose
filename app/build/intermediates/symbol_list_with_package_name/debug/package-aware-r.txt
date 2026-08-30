@@ -1414,7 +1414,6 @@ color error_color_material_dark
 color error_color_material_light
 color foreground_material_dark
 color foreground_material_light
-color formula_bg
 color highlighted_text_material_dark
 color highlighted_text_material_light
 color m3_appbar_overlay_color
@@ -2013,10 +2012,16 @@ color material_timepicker_button_stroke
 color material_timepicker_clock_text_color
 color material_timepicker_clockface
 color material_timepicker_modebutton_tint
-color medical_accent
 color medical_bg_light
+color medical_error
+color medical_error_bg
+color medical_info_bg
+color medical_outline
 color medical_primary
+color medical_primary_variant
 color medical_surface
+color medical_warning_bg
+color medical_warning_text
 color mtrl_btn_bg_color_selector
 color mtrl_btn_ripple_color
 color mtrl_btn_stroke_color_selector
@@ -2074,6 +2079,7 @@ color mtrl_textinput_focused_box_stroke_color
 color mtrl_textinput_hovered_box_stroke_color
 color notification_action_color_filter
 color notification_icon_bg_color
+color on_medical_primary
 color primary_dark_material_dark
 color primary_dark_material_light
 color primary_material_dark
@@ -2094,8 +2100,8 @@ color switch_thumb_material_dark
 color switch_thumb_material_light
 color switch_thumb_normal_material_dark
 color switch_thumb_normal_material_light
-color text_primary
-color text_secondary
+color text_main
+color text_sub
 color tooltip_background_dark
 color tooltip_background_light
 dimen abc_action_bar_content_inset_material
@@ -2181,8 +2187,9 @@ dimen abc_text_size_title_material
 dimen abc_text_size_title_material_toolbar
 dimen appcompat_dialog_background_inset
 dimen button_height
-dimen card_corner_radius
+dimen button_radius
 dimen card_elevation
+dimen card_radius
 dimen cardview_compat_inset_shadow
 dimen cardview_default_elevation
 dimen cardview_default_radius
@@ -2255,6 +2262,7 @@ dimen hint_alpha_material_dark
 dimen hint_alpha_material_light
 dimen hint_pressed_alpha_material_dark
 dimen hint_pressed_alpha_material_light
+dimen input_radius
 dimen item_touch_helper_max_drag_scroll_per_frame
 dimen item_touch_helper_swipe_escape_max_velocity
 dimen item_touch_helper_swipe_escape_velocity
@@ -2640,9 +2648,6 @@ dimen m3_sys_state_pressed_state_layer_opacity
 dimen m3_timepicker_display_stroke_width
 dimen m3_timepicker_window_elevation
 dimen m3_toolbar_text_size_title
-dimen margin_large
-dimen margin_medium
-dimen margin_small
 dimen material_bottom_sheet_max_width
 dimen material_clock_display_height
 dimen material_clock_display_padding
@@ -2893,9 +2898,16 @@ dimen notification_subtext_size
 dimen notification_top_pad
 dimen notification_top_pad_large_text
 dimen screen_padding
-dimen text_body
-dimen text_subtitle
-dimen text_title
+dimen spacing_huge
+dimen spacing_large
+dimen spacing_medium
+dimen spacing_small
+dimen spacing_tiny
+dimen text_base
+dimen text_caption
+dimen text_h1
+dimen text_h2
+dimen text_small
 dimen tooltip_corner_radius
 dimen tooltip_horizontal_padding
 dimen tooltip_margin
@@ -3195,6 +3207,7 @@ id buttonPanel
 id cache_measures
 id callMeasure
 id cancel_button
+id cardResult
 id carryVelocity
 id center
 id centerCrop
@@ -3560,6 +3573,7 @@ id title
 id titleDividerNoCustom
 id title_template
 id toggle
+id toolbar
 id top
 id topPanel
 id touch_outside
@@ -3573,6 +3587,7 @@ id transition_transform
 id triangle
 id tvFormulaInfo
 id tvResult
+id tvResultDetails
 id unchecked
 id uniform
 id unlabeled
@@ -4281,6 +4296,7 @@ style MaterialAlertDialog_MaterialComponents_Title_Panel
 style MaterialAlertDialog_MaterialComponents_Title_Panel_CenterStacked
 style MaterialAlertDialog_MaterialComponents_Title_Text
 style MaterialAlertDialog_MaterialComponents_Title_Text_CenterStacked
+style MedicalButton
 style MedicalDropdown
 style MedicalTextInput
 style Platform_AppCompat
@@ -4524,6 +4540,7 @@ style Theme_Design_Light
 style Theme_Design_Light_BottomSheetDialog
 style Theme_Design_Light_NoActionBar
 style Theme_Design_NoActionBar
+style Theme_DrugDose
 style Theme_Material3_Dark
 style Theme_Material3_Dark_BottomSheetDialog
 style Theme_Material3_Dark_Dialog

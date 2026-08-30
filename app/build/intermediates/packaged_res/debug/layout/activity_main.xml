@@ -1,189 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/medical_bg_light"
-    android:fillViewport="true">
+    android:background="@color/medical_bg_light">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/screen_padding">
+        app:elevation="0dp">
 
-        <!-- Header -->
-        <TextView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="@color/medical_primary"
-            android:textSize="@dimen/text_title"
-            android:textStyle="bold"
-            android:gravity="center" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/medical_primary"
+            app:title="DrugDose"
+            app:titleTextColor="@color/on_medical_primary"
+            app:titleCentered="true" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_large"
-            android:text="@string/app_subtitle"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/text_subtitle"
-            android:gravity="center" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Selezione Farmaco (Dropdown Moderno) -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/MedicalDropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_medium"
-            android:hint="@string/seleziona_farmaco">
-
-            <AutoCompleteTextView
-                android:id="@+id/spinnerDrug"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Indicazione Clinica (Dropdown Moderno) -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/MedicalDropdown"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_medium"
-            android:hint="@string/indicazione_clinica">
-
-            <AutoCompleteTextView
-                android:id="@+id/spinnerIndication"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Input Dati Paziente -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_medium"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:orientation="vertical"
+            android:padding="@dimen/screen_padding">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/MedicalTextInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:hint="@string/hint_peso"
-                app:placeholderText="@string/placeholder_peso">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etWeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/MedicalTextInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:hint="@string/hint_altezza"
-                app:placeholderText="@string/placeholder_altezza">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etHeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/MedicalTextInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/hint_eta"
-                app:placeholderText="@string/placeholder_eta">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etAge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <!-- Card Formula e Vincoli -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_large"
-            app:cardBackgroundColor="@color/formula_bg"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="0dp">
-
+            <!-- SEZIONE 1: Selezione Farmaco -->
             <TextView
-                android:id="@+id/tvFormulaInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FARMACO E INDICAZIONE"
+                android:textColor="@color/medical_primary"
+                android:textSize="@dimen/text_caption"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="@dimen/spacing_small" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/MedicalDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin_medium"
-                android:text="@string/formula_vincoli"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:hint="@string/seleziona_farmaco">
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerDrug"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textSize="@dimen/text_base" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/MedicalDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:hint="@string/indicazione_clinica">
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerIndication"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textSize="@dimen/text_base" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- SEZIONE 2: Dati Paziente -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATI PAZIENTE"
                 android:textColor="@color/medical_primary"
-                android:textSize="@dimen/text_body" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Bottone Calcola -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCalculate"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginBottom="@dimen/margin_large"
-            android:text="@string/calcola_dose"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:backgroundTint="@color/medical_accent"
-            app:cornerRadius="12dp" />
-
-        <!-- Card Risultato -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/medical_surface"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/card_elevation"
-            app:strokeColor="@color/medical_accent"
-            app:strokeWidth="2dp">
+                android:textSize="@dimen/text_caption"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="@dimen/spacing_small" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/margin_large"
-                android:gravity="center">
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="@dimen/spacing_large">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MedicalTextInput"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/titolo_risultato"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_subtitle"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/spacing_small"
+                    android:hint="Peso (kg)">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textSize="@dimen/text_base" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/tvResult"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MedicalTextInput"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/risultato"
-                    android:textColor="@color/medical_primary"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:gravity="center" />
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/spacing_small"
+                    android:hint="Altezza (cm)">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etHeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:textSize="@dimen/text_base" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MedicalTextInput"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Età">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:textSize="@dimen/text_base" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-    </LinearLayout>
-</ScrollView>
+            <!-- SEZIONE 3: Pannello Informativo -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/medical_outline"
+                app:cardCornerRadius="@dimen/card_radius"
+                app:cardBackgroundColor="@color/medical_surface"
+                android:layout_marginBottom="@dimen/spacing_large">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_medium">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PARAMETRI CLINICI"
+                        android:textSize="@dimen/text_caption"
+                        android:textColor="@color/text_sub"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/spacing_small" />
+
+                    <TextView
+                        android:id="@+id/tvFormulaInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/formula_vincoli"
+                        android:textColor="@color/text_main"
+                        android:textSize="@dimen/text_small"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Pulsante Calcola -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCalculate"
+                style="@style/MedicalButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:text="@string/calcola_dose"
+                android:textSize="@dimen/text_base"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/spacing_large" />
+
+            <!-- SEZIONE 4: Risultato -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/card_elevation"
+                app:cardCornerRadius="@dimen/card_radius"
+                app:cardBackgroundColor="@color/medical_surface"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/medical_primary"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_medium">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/titolo_risultato"
+                        android:textSize="@dimen/text_caption"
+                        android:textColor="@color/text_sub"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/spacing_medium" />
+
+                    <TextView
+                        android:id="@+id/tvResult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/risultato"
+                        android:textColor="@color/medical_primary"
+                        android:textSize="@dimen/text_h1"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_marginBottom="@dimen/spacing_small" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/medical_outline"
+                        android:layout_marginVertical="@dimen/spacing_medium" />
+
+                    <TextView
+                        android:id="@+id/tvResultDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_sub"
+                        android:textSize="@dimen/text_small"
+                        android:lineSpacingExtra="2dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Disclaimer -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_huge"
+                android:text="DISCLAIMER: Questo software è un supporto al calcolo clinico e non sostituisce il giudizio del medico professionista. Verificare sempre i dosaggi prima della somministrazione."
+                android:textSize="10sp"
+                android:textColor="@color/text_sub"
+                android:gravity="center"
+                android:paddingBottom="@dimen/spacing_large" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

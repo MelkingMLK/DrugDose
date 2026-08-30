@@ -1,10 +1,14 @@
 [
     {
+        "merged": "/Users/gianluca/.gradle/daemon/8.9/it.uninsubria.drugdose.app-merged_res-36:/layout_activity_main.xml.flat",
+        "source": "/Users/gianluca/.gradle/daemon/8.9/it.uninsubria.drugdose.app-main-38:/layout/activity_main.xml"
+    },
+    {
         "merged": "it.uninsubria.drugdose.app-merged_res-36:/drawable_edit_text_rounded.xml.flat",
         "source": "it.uninsubria.drugdose.app-main-38:/drawable/edit_text_rounded.xml"
     },
     {
-        "merged": "it.uninsubria.drugdose.app-merged_res-36:/layout_activity_main.xml.flat",
-        "source": "it.uninsubria.drugdose.app-main-38:/layout/activity_main.xml"
+        "merged": "/Users/gianluca/.gradle/daemon/8.9/it.uninsubria.drugdose.app-merged_res-36:/drawable_edit_text_rounded.xml.flat",
+        "source": "/Users/gianluca/.gradle/daemon/8.9/it.uninsubria.drugdose.app-main-38:/drawable/edit_text_rounded.xml"
     }
 ]
