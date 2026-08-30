@@ -1,11 +1,8 @@
-
-
 <!DOCTYPE html>
-<html lang="it">
-<head>
+<html lang="it"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roadmap & Task Division - Progetto DrugDose (PDM 2025/2026)</title>
+    <title>Roadmap &amp; Task Division - Progetto DrugDose (PDM 2025/2026)</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -237,16 +234,16 @@
     </header>
 
     <div class="notice">
-        <strong>Meccanismo di Sincronizzazione Git:</strong> I browser non possono scrivere direttamente sui file locali senza server. Quando spuntate le checkbox, lo stato viene salvato nel <code>localStorage</code> del browser locale. Per sincronizzare le spunte con il repository remoto, cliccate <strong>"Esporta file aggiornato per Git Push"</strong>, sostituite questo <code>index.html</code> nel repository, e fate <code>git add . && git commit -m "update tasks" && git push</code>. In questo modo entrambi vedrete lo stato sincronizzato all'ultimo pull!
+        <strong>Meccanismo di Sincronizzazione Git:</strong> I browser non possono scrivere direttamente sui file locali senza server. Quando spuntate le checkbox, lo stato viene salvato nel <code>localStorage</code> del browser locale. Per sincronizzare le spunte con il repository remoto, cliccate <strong>"Esporta file aggiornato per Git Push"</strong>, sostituite questo <code>index.html</code> nel repository, e fate <code>git add . &amp;&amp; git commit -m "update tasks" &amp;&amp; git push</code>. In questo modo entrambi vedrete lo stato sincronizzato all'ultimo pull!
     </div>
 
     <div class="toolbar">
         <div class="progress-box">
             <span style="font-size: 0.85rem; font-weight: 600;">Completamento Globale:</span>
             <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progressBar"></div>
+                <div class="progress-bar-fill" id="progressBar" style="width: 38%;"></div>
             </div>
-            <span id="progressText" style="font-size: 0.85rem; font-weight: 600;">0%</span>
+            <span id="progressText" style="font-size: 0.85rem; font-weight: 600;">38% (5/13)</span>
         </div>
         <button class="btn btn-sync" onclick="exportUpdatedHtml()">⬇️ Esporta file aggiornato per Git Push</button>
     </div>
@@ -256,7 +253,7 @@
         <div class="column col-dev1">
             <div class="column-header">
                 <span class="column-title">Dev 1: Signorino Melnyk</span>
-                <span class="badge">Dati & Logica Clinica</span>
+                <span class="badge">Dati &amp; Logica Clinica</span>
             </div>
 
             <!-- Task 1.1 -->
@@ -276,7 +273,7 @@
             <div class="task-card" id="card_t1_2">
                 <div class="task-main">
                     <input type="checkbox" id="t1_2" onchange="toggleTask('t1_2')">
-                    <label for="t1_2" class="task-label">Kotlin Data Classes & JSON Parsing</label>
+                    <label for="t1_2" class="task-label">Kotlin Data Classes &amp; JSON Parsing</label>
                 </div>
                 <div class="task-desc">Creazione del modello dati (<code>Drug</code>, <code>TherapeuticRule</code>, <code>WeightBracket</code>, <code>FormulaType</code>) e deserializzazione da asset locali via parser robusto.</div>
                 <div class="task-meta">
@@ -302,7 +299,7 @@
             <div class="task-card" id="card_t1_4">
                 <div class="task-main">
                     <input type="checkbox" id="t1_4" onchange="toggleTask('t1_4')">
-                    <label for="t1_4" class="task-label">Logica di Arrotondamento & Limiti Clinici</label>
+                    <label for="t1_4" class="task-label">Logica di Arrotondamento &amp; Limiti Clinici</label>
                 </div>
                 <div class="task-desc">Algoritmo per calcolo forma farmaceutica (es. numero compresse/frazioni), clamping su dose massima ammissibile e generazione alert vincoli (min/max peso/età).</div>
                 <div class="task-meta">
@@ -329,13 +326,13 @@
         <div class="column col-dev2">
             <div class="column-header">
                 <span class="column-title">Dev 2: Gianluca</span>
-                <span class="badge">UI, Mockup & Validazione</span>
+                <span class="badge">UI, Mockup &amp; Validazione</span>
             </div>
 
             <!-- Task 2.1 -->
-            <div class="task-card" id="card_t2_1">
+            <div class="task-card completed" id="card_t2_1">
                 <div class="task-main">
-                    <input type="checkbox" id="t2_1" onchange="toggleTask('t2_1')">
+                    <input type="checkbox" id="t2_1" onchange="toggleTask('t2_1')" checked="checked">
                     <label for="t2_1" class="task-label">Implementazione Schermata Principale (Mockup)</label>
                 </div>
                 <div class="task-desc">Costruzione del layout seguendo le slide: Dropdown/Spinner selezione Farmaco e Indicazione clinica, campi di input per Peso (kg), Altezza (cm) ed Età.</div>
@@ -346,9 +343,9 @@
             </div>
 
             <!-- Task 2.2 -->
-            <div class="task-card" id="card_t2_2">
+            <div class="task-card completed" id="card_t2_2">
                 <div class="task-main">
-                    <input type="checkbox" id="t2_2" onchange="toggleTask('t2_2')">
+                    <input type="checkbox" id="t2_2" onchange="toggleTask('t2_2')" checked="checked">
                     <label for="t2_2" class="task-label">Modulo di Validazione Input Rigida</label>
                 </div>
                 <div class="task-desc">Controllo in tempo reale sugli input utente: parsing numerico sicuro (<code>toDoubleOrNull</code>), blocco valori negativi/impossibili, gestione errori con <code>EditText.error</code>.</div>
@@ -359,10 +356,10 @@
             </div>
 
             <!-- Task 2.3 -->
-            <div class="task-card" id="card_t2_3">
+            <div class="task-card completed" id="card_t2_3">
                 <div class="task-main">
-                    <input type="checkbox" id="t2_3" onchange="toggleTask('t2_3')">
-                    <label for="t2_3" class="task-label">Card Informativa Dinamica (Formule & Vincoli)</label>
+                    <input type="checkbox" id="t2_3" onchange="toggleTask('t2_3')" checked="checked">
+                    <label for="t2_3" class="task-label">Card Informativa Dinamica (Formule &amp; Vincoli)</label>
                 </div>
                 <div class="task-desc">Visualizzazione reattiva delle caratteristiche del farmaco selezionato: unità di misura, tipo di formula applicata, alert preventivi e riferimenti alle fonti (RCP/AIFA).</div>
                 <div class="task-meta">
@@ -372,10 +369,10 @@
             </div>
 
             <!-- Task 2.4 -->
-            <div class="task-card" id="card_t2_4">
+            <div class="task-card completed" id="card_t2_4">
                 <div class="task-main">
-                    <input type="checkbox" id="t2_4" onchange="toggleTask('t2_4')">
-                    <label for="t2_4" class="task-label">Pannello Risultati & Visual Alert Clinici</label>
+                    <input type="checkbox" id="t2_4" onchange="toggleTask('t2_4')" checked="checked">
+                    <label for="t2_4" class="task-label">Pannello Risultati &amp; Visual Alert Clinici</label>
                 </div>
                 <div class="task-desc">Sezione grafica dedicata all'output: dose teorica calcolata, forma farmaceutica consigliata (compresse), banner di attenzione/alert per superamento soglie.</div>
                 <div class="task-meta">
@@ -388,7 +385,7 @@
             <div class="task-card" id="card_t2_5">
                 <div class="task-main">
                     <input type="checkbox" id="t2_5" onchange="toggleTask('t2_5')">
-                    <label for="t2_5" class="task-label">Gestione Ciclo di Vita & State Persistence</label>
+                    <label for="t2_5" class="task-label">Gestione Ciclo di Vita &amp; State Persistence</label>
                 </div>
                 <div class="task-desc">Garantire che la rotazione dello schermo o cambi di configurazione non causino la perdita dei parametri inseriti o dei risultati (ViewModel / SavedState).</div>
                 <div class="task-meta">
@@ -401,14 +398,14 @@
         <!-- COLONNA CONGIUNTA -->
         <div class="column col-shared">
             <div class="column-header">
-                <span class="column-title">Integrazione & QA</span>
-                <span class="badge">Insieme (Melnyk & Gianluca)</span>
+                <span class="column-title">Integrazione &amp; QA</span>
+                <span class="badge">Insieme (Melnyk &amp; Gianluca)</span>
             </div>
 
             <!-- Task S.1 -->
-            <div class="task-card" id="card_ts_1">
+            <div class="task-card completed" id="card_ts_1">
                 <div class="task-main">
-                    <input type="checkbox" id="ts_1" onchange="toggleTask('ts_1')">
+                    <input type="checkbox" id="ts_1" onchange="toggleTask('ts_1')" checked="checked">
                     <label for="ts_1" class="task-label">Definizione del Contratto di Interfaccia</label>
                 </div>
                 <div class="task-desc">Accordo preventivo su metodi e DTO tra il modulo di calcolo (Dev 1) e l'interfaccia/ViewModel (Dev 2) per lavorare in parallelo senza conflitti.</div>
@@ -424,7 +421,7 @@
                     <input type="checkbox" id="ts_2" onchange="toggleTask('ts_2')">
                     <label for="ts_2" class="task-label">Verifica e Validazione Clinica dei Risultati</label>
                 </div>
-                <div class="task-desc">Collaudo con i casi test delle slide (es. Ivermectina 70 kg -> 14 mg; farmaco BSA 170 cm/70 kg -> 91 mg) e test di usabilità complessiva.</div>
+                <div class="task-desc">Collaudo con i casi test delle slide (es. Ivermectina 70 kg -&gt; 14 mg; farmaco BSA 170 cm/70 kg -&gt; 91 mg) e test di usabilità complessiva.</div>
                 <div class="task-meta">
                     <span class="tag">Verification</span>
                     <span class="tag">Clinical QA</span>
@@ -435,7 +432,7 @@
             <div class="task-card" id="card_ts_3">
                 <div class="task-main">
                     <input type="checkbox" id="ts_3" onchange="toggleTask('ts_3')">
-                    <label for="ts_3" class="task-label">Refactoring & Preparazione Consegna</label>
+                    <label for="ts_3" class="task-label">Refactoring &amp; Preparazione Consegna</label>
                 </div>
                 <div class="task-desc">Pulizia del codice Kotlin, eliminazione hardcoding stringhe (<code>res/values/strings.xml</code>), test su emulatore e stesura documentazione finale.</div>
                 <div class="task-meta">
@@ -526,8 +523,8 @@
     }
 </script>
 
-</body>
-</html>
+
+
 
 tasks_drugdose.html
-Visualizzazione di tasks_drugdose.html.
+Visualizzazione di tasks_drugdose.html.</body></html>
