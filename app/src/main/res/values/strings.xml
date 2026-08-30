@@ -15,4 +15,8 @@
     <string name="calcola_dose">CALCOLA DOSE</string>
     <string name="risultato">In attesa di dati...</string>
     <string name="titolo_risultato">Esito del Calcolo</string>
+
+    <string name="placeholder_peso">es. 70.5</string>
+    <string name="placeholder_altezza">es. 175</string>
+    <string name="placeholder_eta">es. 35</string>
 </resources>

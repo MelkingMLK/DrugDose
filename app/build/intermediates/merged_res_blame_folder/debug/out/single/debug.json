@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "it.uninsubria.drugdose.app-merged_res-33:/layout_activity_main.xml.flat",
+        "source": "it.uninsubria.drugdose.app-main-35:/layout/activity_main.xml"
+    },
+    {
+        "merged": "it.uninsubria.drugdose.app-merged_res-33:/drawable_edit_text_rounded.xml.flat",
+        "source": "it.uninsubria.drugdose.app-main-35:/drawable/edit_text_rounded.xml"
+    }
+]
