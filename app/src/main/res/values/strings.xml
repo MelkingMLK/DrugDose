@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DrugDose</string>
+    <string name="app_subtitle">Calcolatore Dermatologico</string>
+
+    <string name="seleziona_farmaco">Seleziona Farmaco</string>
+    <string name="indicazione_clinica">Indicazione Clinica</string>
+
+    <string name="hint_peso">Peso (kg)</string>
+    <string name="hint_altezza">Altezza (cm)</string>
+    <string name="hint_eta">Età (anni)</string>
+
+    <string name="formula_vincoli">Seleziona un farmaco per visualizzare i parametri clinici e le formule (es. BSA, mg/kg).</string>
+
+    <string name="calcola_dose">CALCOLA DOSE</string>
+    <string name="risultato">In attesa di dati...</string>
+    <string name="titolo_risultato">Esito del Calcolo</string>
+</resources>

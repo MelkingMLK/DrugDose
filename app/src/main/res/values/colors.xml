@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colori Base -->
+    <color name="medical_primary">#1E3A8A</color> <!-- Blu Oltremare scuro -->
+    <color name="medical_accent">#0D9488</color> <!-- Verde acqua/Teal -->
+
+    <!-- Sfondi e Superfici -->
+    <color name="medical_bg_light">#F8FAFC</color> <!-- Grigio chiarissimo quasi bianco -->
+    <color name="medical_surface">#FFFFFF</color>
+    <color name="formula_bg">#E0F2FE</color> <!-- Azzurrino per la card info -->
+
+    <!-- Testi -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#64748B</color>
+</resources>
