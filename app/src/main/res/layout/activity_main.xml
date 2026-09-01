@@ -237,17 +237,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Disclaimer -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_huge"
-                android:text="DISCLAIMER: Questo software è un supporto al calcolo clinico e non sostituisce il giudizio del medico professionista. Verificare sempre i dosaggi prima della somministrazione."
-                android:textSize="10sp"
-                android:textColor="@color/text_sub"
-                android:gravity="center"
-                android:paddingBottom="@dimen/spacing_large" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

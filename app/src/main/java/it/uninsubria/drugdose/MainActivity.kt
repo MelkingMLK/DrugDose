@@ -158,21 +158,19 @@ class MainActivity : AppCompatActivity() {
             val height = etHeight.text?.toString()?.toDoubleOrNull()
             val age = etAge.text?.toString()?.toIntOrNull()
 
-            var isValid = true
-            if (weight == null || weight <= 0 || weight > 300) {
-                etWeight.error = "Campo obbligatorio (0-300)"
-                isValid = false
+            val validation = viewModel.validateInputs(weight, height, age)
+
+            if (!validation.isWeightValid) {
+                etWeight.error = "Campo obbligatorio (1-230 kg)"
             }
-            if (height == null || height <= 0 || height > 250) {
-                etHeight.error = "Campo obbligatorio (0-250)"
-                isValid = false
+            if (!validation.isHeightValid) {
+                etHeight.error = "Campo obbligatorio (45-225 cm)"
             }
-            if (age == null || age <= 0 || age > 120) {
-                etAge.error = "Campo obbligatorio (0-120)"
-                isValid = false
+            if (!validation.isAgeValid) {
+                etAge.error = "Campo obbligatorio (1-120 anni)"
             }
 
-            if (!isValid) return@setOnClickListener
+            if (!validation.isValid) return@setOnClickListener
 
             if (viewModel.selectedIndication.value != null) {
                 viewModel.calculate(weight!!, height!!, age!!)

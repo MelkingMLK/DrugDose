@@ -5,6 +5,38 @@ import kotlin.math.sqrt
 
 object DoseCalculator {
 
+    const val MIN_WEIGHT_KG = 1.0
+    const val MAX_WEIGHT_KG = 230.0
+    const val MIN_HEIGHT_CM = 45.0
+    const val MAX_HEIGHT_CM = 225.0
+    const val MIN_AGE_YEARS = 1
+    const val MAX_AGE_YEARS = 120
+
+    data class ValidationResult(
+        val isWeightValid: Boolean,
+        val isHeightValid: Boolean,
+        val isAgeValid: Boolean
+    ) {
+        val isValid: Boolean get() = isWeightValid && isHeightValid && isAgeValid
+    }
+
+    fun isValidWeight(weightKg: Double?): Boolean =
+        weightKg != null && weightKg in MIN_WEIGHT_KG..MAX_WEIGHT_KG
+
+    fun isValidHeight(heightCm: Double?): Boolean =
+        heightCm != null && heightCm in MIN_HEIGHT_CM..MAX_HEIGHT_CM
+
+    fun isValidAge(ageYears: Int?): Boolean =
+        ageYears != null && ageYears in MIN_AGE_YEARS..MAX_AGE_YEARS
+
+    fun validateInputs(weightKg: Double?, heightCm: Double?, ageYears: Int?): ValidationResult {
+        return ValidationResult(
+            isWeightValid = isValidWeight(weightKg),
+            isHeightValid = isValidHeight(heightCm),
+            isAgeValid = isValidAge(ageYears)
+        )
+    }
+
     data class CalculationResult(
         val finalDose: Double,
         val unit: String,
@@ -29,6 +61,20 @@ object DoseCalculator {
         var bsa: Double? = null
         var isMaxDoseApplied = false
         val alerts = mutableListOf<String>()
+
+        if (!isValidWeight(weightKg)) {
+            alerts.add("Peso fuori dai limiti clinici consentiti ($MIN_WEIGHT_KG-$MAX_WEIGHT_KG kg)")
+        }
+        heightCm?.let {
+            if (!isValidHeight(it)) {
+                alerts.add("Altezza fuori dai limiti clinici consentiti ($MIN_HEIGHT_CM-$MAX_HEIGHT_CM cm)")
+            }
+        }
+        age?.let {
+            if (!isValidAge(it)) {
+                alerts.add("Età fuori dai limiti clinici consentiti ($MIN_AGE_YEARS-$MAX_AGE_YEARS anni)")
+            }
+        }
 
         indication.minWeight?.let { if (weightKg < it) alerts.add("Peso inferiore al minimo consigliato ($it kg)") }
         indication.maxWeight?.let { if (weightKg > it) alerts.add("Peso superiore al massimo consigliato ($it kg)") }
