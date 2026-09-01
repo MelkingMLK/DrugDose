@@ -1,182 +1,168 @@
 package it.uninsubria.drugdose
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import it.uninsubria.drugdose.R
 import it.uninsubria.drugdose.model.CalculationType
+import it.uninsubria.drugdose.model.Drug
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
+    private lateinit var spinnerDrug: AutoCompleteTextView
+    private lateinit var spinnerIndication: AutoCompleteTextView
+    private lateinit var etWeight: TextInputEditText
+    private lateinit var etHeight: TextInputEditText
+    private lateinit var etAge: TextInputEditText
+    private lateinit var tvFormulaInfo: TextView
+    private lateinit var btnCalculate: MaterialButton
+    private lateinit var tvResult: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_DrugDose)
         setContentView(R.layout.activity_main)
 
-        viewModel.loadDrugs()
+        initViews()
+        setupObservers()
+        setupListeners()
 
-        setupDropdowns()
-        setupInfoCard()
-        setupCalculation()
+        viewModel.loadDrugs()
     }
 
-    private fun setupDropdowns() {
-        val spinnerDrug = findViewById<AutoCompleteTextView>(R.id.spinnerDrug)
-        val spinnerIndication = findViewById<AutoCompleteTextView>(R.id.spinnerIndication)
+    private fun initViews() {
+        spinnerDrug = findViewById(R.id.spinnerDrug)
+        spinnerIndication = findViewById(R.id.spinnerIndication)
+        etWeight = findViewById(R.id.etWeight)
+        etHeight = findViewById(R.id.etHeight)
+        etAge = findViewById(R.id.etAge)
+        tvFormulaInfo = findViewById(R.id.tvFormulaInfo)
+        btnCalculate = findViewById(R.id.btnCalculate)
+        tvResult = findViewById(R.id.tvResult)
+    }
 
-        viewModel.drugs.observe(this) { drugs ->
-            val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, drugs.map { it.name })
-            spinnerDrug.setAdapter(adapter)
-        }
+    private fun setupObservers() {
+        viewModel.drugs.observe(this) { drugList ->
+            if (drugList.isNotEmpty()) {
+                val drugNames = drugList.map { it.name }
+                val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, drugNames)
+                spinnerDrug.setAdapter(adapter)
 
-        spinnerDrug.setOnItemClickListener { _, _, position, _ ->
-            val selectedDrug = viewModel.drugs.value?.get(position)
-            viewModel.selectDrug(selectedDrug)
-            spinnerIndication.setText("", false)
+                spinnerDrug.setOnItemClickListener { _, _, position, _ ->
+                    val selectedDrug = drugList[position]
+                    viewModel.selectDrug(selectedDrug)
+
+                    val indicationAdapter = ArrayAdapter(
+                        this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        listOf(selectedDrug.clinicalIndication)
+                    )
+                    spinnerIndication.setAdapter(indicationAdapter)
+                    spinnerIndication.setText(selectedDrug.clinicalIndication, false)
+                }
+            }
         }
 
         viewModel.selectedDrug.observe(this) { drug ->
             if (drug != null) {
-                val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, drug.indications.map { it.name })
-                spinnerIndication.setAdapter(adapter)
-                spinnerIndication.isEnabled = true
+                updateDrugCardInfo(drug)
+                tvResult.text = getString(R.string.risultato)
             } else {
-                spinnerIndication.setAdapter(null)
-                spinnerIndication.isEnabled = false
-            }
-        }
-
-        spinnerIndication.setOnItemClickListener { _, _, position, _ ->
-            val selectedIndication = viewModel.selectedDrug.value?.indications?.get(position)
-            viewModel.selectIndication(selectedIndication)
-        }
-    }
-
-    private fun setupInfoCard() {
-        val tvFormulaInfo = findViewById<TextView>(R.id.tvFormulaInfo)
-
-        viewModel.selectedIndication.observe(this) { indication ->
-            if (indication == null) {
                 tvFormulaInfo.text = getString(R.string.formula_vincoli)
-                return@observe
+                spinnerIndication.setText("", false)
+                tvResult.text = getString(R.string.risultato)
             }
-
-            val infoText = StringBuilder()
-            val typeDesc = when (indication.calculationType) {
-                CalculationType.WEIGHT_BASED -> "🔹 Calcolo su base Peso"
-                CalculationType.BSA_BASED -> "🔹 Calcolo BSA (Mosteller)"
-                CalculationType.FIXED_DOSE -> "🔹 Dose fissa"
-                CalculationType.WEIGHT_BRACKETS -> "🔹 Calcolo per fasce di peso"
-            }
-            infoText.append(typeDesc).append("\n")
-
-            when (indication.calculationType) {
-                CalculationType.FIXED_DOSE -> 
-                    infoText.append("Dose: ${indication.fixedDose} ${indication.unit}\n")
-                CalculationType.WEIGHT_BRACKETS -> 
-                    infoText.append("Dose variabile in base alla fascia\n")
-                else -> 
-                    infoText.append("Dose base: ${indication.dosePerUnit} ${indication.unit}\n")
-            }
-
-            val alerts = mutableListOf<String>()
-            indication.maxDose?.let { alerts.add("Dose massima: $it ${indication.unit.split("/")[0]}") }
-            indication.minWeight?.let { alerts.add("Peso min: $it kg") }
-            indication.maxWeight?.let { alerts.add("Peso max: $it kg") }
-
-            if (alerts.isNotEmpty()) {
-                infoText.append("\nLimitazioni cliniche:\n")
-                alerts.forEach { infoText.append("• $it\n") }
-            }
-
-            tvFormulaInfo.text = infoText.toString().trim()
         }
-    }
-
-    private fun setupCalculation() {
-        val etWeight = findViewById<TextInputEditText>(R.id.etWeight)
-        val etHeight = findViewById<TextInputEditText>(R.id.etHeight)
-        val etAge = findViewById<TextInputEditText>(R.id.etAge)
-        val btnCalculate = findViewById<MaterialButton>(R.id.btnCalculate)
-        val tvResult = findViewById<TextView>(R.id.tvResult)
-        val tvResultDetails = findViewById<TextView>(R.id.tvResultDetails)
 
         viewModel.calculationResult.observe(this) { result ->
             if (result != null) {
-                // Risultato principale
-                tvResult.text = "${result.finalDose} ${result.unit}"
-                
-                // Colore di stato
-                if (result.isMaxDoseApplied) {
-                    tvResult.setTextColor(ContextCompat.getColor(this, R.color.medical_error))
+                val doseFormatted = if (result.theoreticalDose % 1.0 == 0.0) {
+                    result.theoreticalDose.toInt().toString()
                 } else {
-                    tvResult.setTextColor(ContextCompat.getColor(this, R.color.medical_primary))
+                    String.format(Locale.US, "%.2f", result.theoreticalDose)
                 }
 
-                // Dettagli secondari
-                val details = StringBuilder()
-                
-                val practicalDose = result.roundedPharmaceuticalDose ?: result.pharmaceuticalDose
-                if (practicalDose != null) {
-                    details.append("Dose Pratica consigliata: $practicalDose unità/vol\n")
-                }
-                
-                if (result.bsa != null) {
-                    details.append("BSA calcolata: %.2f m²\n".format(result.bsa))
+                val bsaSuffix = if (result.bsaCalculated != null) {
+                    getString(R.string.fmt_bsa_suffix, result.bsaCalculated)
+                } else {
+                    ""
                 }
 
-                if (result.alerts.isNotEmpty()) {
-                    details.append("\n⚠️ AVVERTENZE CLINICHE:\n")
-                    result.alerts.forEach { alert ->
-                        details.append("• $alert\n")
+                val out = buildString {
+                    append(getString(R.string.fmt_dose_teorica, doseFormatted, result.targetUnit, bsaSuffix)).append("\n\n")
+                    append(getString(R.string.fmt_dose_pratica, result.practicalDoseText)).append("\n\n")
+                    append(getString(R.string.fmt_somministrazione, result.administrationInfo)).append("\n\n")
+                    append(getString(R.string.fmt_fonte, result.source))
+
+                    if (result.warnings.isNotEmpty()) {
+                        append("\n\n").append(getString(R.string.fmt_avvertenze, result.warnings.joinToString("\n• ")))
                     }
                 }
-
-                tvResultDetails.text = details.toString().trim()
-                Toast.makeText(this, "Calcolo completato", Toast.LENGTH_SHORT).show()
-            } else {
-                tvResult.text = getString(R.string.risultato)
-                tvResult.setTextColor(ContextCompat.getColor(this, R.color.text_sub))
-                tvResultDetails.text = ""
+                tvResult.text = out
             }
         }
 
+        viewModel.validationError.observe(this) { errorMsg ->
+            if (errorMsg != null) {
+                Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun updateDrugCardInfo(drug: Drug) {
+        val formulaDesc = when (drug.calculationType) {
+            CalculationType.PER_KG -> "Dose per peso corporeo (${drug.unitDoseOriginal})"
+            CalculationType.PER_BSA -> "Dose per BSA (${drug.unitDoseOriginal}) - Formula Mosteller"
+            CalculationType.FIXED -> "Dose fissa (${drug.unitDoseOriginal})"
+            CalculationType.WEIGHT_BRACKETS -> "Dose a scaglioni di peso"
+        }
+
+        val parentLayout = etHeight.parent?.parent as? View
+        if (drug.calculationType == CalculationType.PER_BSA) {
+            etHeight.visibility = View.VISIBLE
+            parentLayout?.visibility = View.VISIBLE
+        } else {
+            etHeight.visibility = View.GONE
+            parentLayout?.visibility = View.GONE
+        }
+
+        tvFormulaInfo.text = getString(
+            R.string.fmt_info_card,
+            drug.clinicalIndication,
+            formulaDesc,
+            drug.minWeightKg,
+            drug.maxWeightKg,
+            drug.minAgeYears.toInt(),
+            drug.maxTotalDose,
+            drug.targetUnit
+        )
+    }
+
+    private fun setupListeners() {
         btnCalculate.setOnClickListener {
-            etWeight.error = null
-            etHeight.error = null
-            etAge.error = null
+            val weightStr = etWeight.text?.toString() ?: ""
+            val heightStr = etHeight.text?.toString() ?: ""
+            val ageStr = etAge.text?.toString() ?: ""
 
-            val weight = etWeight.text?.toString()?.toDoubleOrNull()
-            val height = etHeight.text?.toString()?.toDoubleOrNull()
-            val age = etAge.text?.toString()?.toIntOrNull()
+            val weight = weightStr.toDoubleOrNull()
+            val height = heightStr.toDoubleOrNull() ?: 0.0
+            val age = ageStr.toDoubleOrNull()
 
-            val validation = viewModel.validateInputs(weight, height, age)
-
-            if (!validation.isWeightValid) {
-                etWeight.error = "Campo obbligatorio (1-230 kg)"
-            }
-            if (!validation.isHeightValid) {
-                etHeight.error = "Campo obbligatorio (45-225 cm)"
-            }
-            if (!validation.isAgeValid) {
-                etAge.error = "Campo obbligatorio (1-120 anni)"
+            if (weight == null || age == null) {
+                Toast.makeText(this, getString(R.string.err_input_invalid), Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
-            if (!validation.isValid) return@setOnClickListener
-
-            if (viewModel.selectedIndication.value != null) {
-                viewModel.calculate(weight!!, height!!, age!!)
-            } else {
-                Toast.makeText(this, "Selezionare farmaco e indicazione", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.calculate(weight, height, age)
         }
     }
 }

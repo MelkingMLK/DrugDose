@@ -3,68 +3,128 @@ package it.uninsubria.drugdose.model
 import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.IOException
 
 class DrugParser(private val context: Context) {
 
     fun parseDrugsFromAssets(fileName: String = "drugs.json"): List<Drug> {
-        val drugs = mutableListOf<Drug>()
-        try {
-            val jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
-            val jsonArray = JSONArray(jsonString)
+        val drugList = mutableListOf<Drug>()
+        val jsonString = loadJsonFromAsset(fileName) ?: return emptyList()
 
+        try {
+            val jsonArray = JSONArray(jsonString)
             for (i in 0 until jsonArray.length()) {
-                val drugObj = jsonArray.getJSONObject(i)
-                drugs.add(parseDrug(drugObj))
+                val obj = jsonArray.getJSONObject(i)
+                val drug = parseDrug(obj)
+                if (drug != null) {
+                    drugList.add(drug)
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return drugs
+
+        return drugList
     }
 
-    private fun parseDrug(obj: JSONObject): Drug {
-        val id = obj.getString("id")
-        val name = obj.getString("name")
-        val indicationsArray = obj.getJSONArray("indications")
-        val indications = mutableListOf<Indication>()
-
-        for (i in 0 until indicationsArray.length()) {
-            indications.add(parseIndication(indicationsArray.getJSONObject(i)))
-        }
-
-        return Drug(id, name, indications)
-    }
-
-    private fun parseIndication(obj: JSONObject): Indication {
-        val brackets = mutableListOf<WeightBracket>()
-        if (obj.has("brackets")) {
-            val bracketsArray = obj.getJSONArray("brackets")
-            for (i in 0 until bracketsArray.length()) {
-                val b = bracketsArray.getJSONObject(i)
-                brackets.add(WeightBracket(
-                    b.getDouble("min_weight"),
-                    b.getDouble("max_weight"),
-                    b.getDouble("dose")
-                ))
+    private fun parseDrug(obj: JSONObject): Drug? {
+        return try {
+            val id = obj.getString("id")
+            val name = obj.getString("name")
+            val clinicalIndication = obj.optString("clinicalIndication", "")
+            val calcTypeStr = obj.optString("calculationType", "FIXED")
+            val calculationType = try {
+                CalculationType.valueOf(calcTypeStr)
+            } catch (e: Exception) {
+                CalculationType.FIXED
             }
-        }
 
-        return Indication(
-            name = obj.getString("name"),
-            calculationType = CalculationType.valueOf(obj.getString("calculation_type")),
-            dosePerUnit = obj.optDouble("dose_per_unit", -1.0).takeIf { it != -1.0 },
-            unit = obj.getString("unit"),
-            maxDose = obj.optDouble("max_dose", -1.0).takeIf { it != -1.0 },
-            fixedDose = obj.optDouble("fixed_dose", -1.0).takeIf { it != -1.0 },
-            brackets = if (brackets.isEmpty()) null else brackets,
-            pharmaceuticalForm = obj.optString("pharmaceutical_form", null),
-            formMultiplier = obj.optDouble("form_multiplier", -1.0).takeIf { it != -1.0 },
-            roundingStep = obj.optDouble("rounding_step", -1.0).takeIf { it != -1.0 },
-            minWeight = obj.optDouble("min_weight", -1.0).takeIf { it != -1.0 },
-            maxWeight = obj.optDouble("max_weight", -1.0).takeIf { it != -1.0 },
-            minAge = obj.optInt("min_age", -1).takeIf { it != -1 },
-            maxAge = obj.optInt("max_age", -1).takeIf { it != -1 },
-            notes = obj.optString("notes", null)
-        )
+            val targetUnit = obj.optString("targetUnit", "mg")
+            val unitDose = obj.optDouble("unitDose", 0.0)
+            val unitDoseOriginal = obj.optString("unitDoseOriginal", "")
+            val maxTotalDose = obj.optDouble("maxTotalDose", Double.MAX_VALUE)
+            val minAgeYears = obj.optDouble("minAgeYears", 0.0)
+            val minWeightKg = obj.optDouble("minWeightKg", 0.0)
+            val maxWeightKg = obj.optDouble("maxWeightKg", 300.0)
+
+            // AvailableForm
+            val formObj = obj.optJSONObject("availableForm")
+            val availableForm = if (formObj != null) {
+                AvailableForm(
+                    formType = formObj.optString("formType", "TABLET"),
+                    strengthValue = formObj.optDouble("strengthValue", 1.0),
+                    strengthUnit = formObj.optString("strengthUnit", "mg"),
+                    isDivisible = formObj.optBoolean("isDivisible", false)
+                )
+            } else {
+                AvailableForm("TABLET", 1.0, "mg", false)
+            }
+
+            // WeightBrackets
+            val bracketsList = mutableListOf<WeightBracket>()
+            val bracketsArray = obj.optJSONArray("weightBrackets")
+            if (bracketsArray != null) {
+                for (j in 0 until bracketsArray.length()) {
+                    val bObj = bracketsArray.getJSONObject(j)
+                    bracketsList.add(
+                        WeightBracket(
+                            minWeightKg = bObj.optDouble("minWeightKg", 0.0),
+                            maxWeightKg = bObj.optDouble("maxWeightKg", 0.0),
+                            doseValue = bObj.optDouble("doseValue", 0.0),
+                            unit = bObj.optString("unit", "mg"),
+                            tabletsCount = bObj.optInt("tabletsCount", 0)
+                        )
+                    )
+                }
+            }
+
+            // Alerts
+            val alertsList = mutableListOf<String>()
+            val alertsArray = obj.optJSONArray("alerts")
+            if (alertsArray != null) {
+                for (k in 0 until alertsArray.length()) {
+                    alertsList.add(alertsArray.getString(k))
+                }
+            }
+
+            val administrationInfo = obj.optString("administrationInfo", "")
+            val source = obj.optString("source", "")
+
+            Drug(
+                id = id,
+                name = name,
+                clinicalIndication = clinicalIndication,
+                calculationType = calculationType,
+                targetUnit = targetUnit,
+                unitDose = unitDose,
+                unitDoseOriginal = unitDoseOriginal,
+                maxTotalDose = maxTotalDose,
+                minAgeYears = minAgeYears,
+                minWeightKg = minWeightKg,
+                maxWeightKg = maxWeightKg,
+                availableForm = availableForm,
+                weightBrackets = bracketsList,
+                administrationInfo = administrationInfo,
+                alerts = alertsList,
+                source = source
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun loadJsonFromAsset(fileName: String): String? {
+        return try {
+            val inputStream = context.assets.open(fileName)
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+            inputStream.close()
+            String(buffer, Charsets.UTF_8)
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            null
+        }
     }
 }

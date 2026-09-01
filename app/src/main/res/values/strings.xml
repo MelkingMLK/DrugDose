@@ -1,22 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DrugDose</string>
     <string name="app_subtitle">Calcolatore Dermatologico</string>
-
     <string name="seleziona_farmaco">Seleziona Farmaco</string>
     <string name="indicazione_clinica">Indicazione Clinica</string>
-
     <string name="hint_peso">Peso (kg)</string>
     <string name="hint_altezza">Altezza (cm)</string>
     <string name="hint_eta">Età (anni)</string>
-
-    <string name="formula_vincoli">Seleziona un farmaco per visualizzare i parametri clinici e le formule (es. BSA, mg/kg).</string>
-
-    <string name="calcola_dose">CALCOLA DOSE</string>
-    <string name="risultato">In attesa di dati...</string>
-    <string name="titolo_risultato">Esito del Calcolo</string>
-
     <string name="placeholder_peso">es. 70.5</string>
     <string name="placeholder_altezza">es. 175</string>
     <string name="placeholder_eta">es. 35</string>
+    <string name="calcola_dose">CALCOLA DOSE</string>
+    <string name="formula_vincoli">Seleziona un farmaco per visualizzare i parametri clinici e le formule (es. BSA, mg/kg).</string>
+    <string name="titolo_risultato">Esito del Calcolo</string>
+    <string name="risultato">In attesa di dati...</string>
+
+    <!-- Stringhe dinamiche con placeholder per evitare Hardcoding -->
+    <string name="fmt_dose_teorica">Dose Teorica: %1$s %2$s%3$s</string>
+    <string name="fmt_dose_pratica">Prescrizione Pratica: %1$s</string>
+    <string name="fmt_somministrazione">Somministrazione: %1$s</string>
+    <string name="fmt_fonte">Fonte: %1$s</string>
+    <string name="fmt_avvertenze">Avvertenze / Note:\n• %1$s</string>
+    <string name="fmt_bsa_suffix"> (BSA: %1$.2f m²)</string>
+    <string name="fmt_info_card">Indicazione: %1$s\nFormula: %2$s\nVincoli: Peso %3$.1f-%4$.1f kg | Età ≥ %5$d anni | Max: %6$.1f %7$s</string>
+    <string name="err_input_invalid">Inserire peso ed età validi.</string>
 </resources>

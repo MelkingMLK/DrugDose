@@ -45,6 +45,14 @@ layout activity_main
 string app_name
 string app_subtitle
 string calcola_dose
+string err_input_invalid
+string fmt_avvertenze
+string fmt_bsa_suffix
+string fmt_dose_pratica
+string fmt_dose_teorica
+string fmt_fonte
+string fmt_info_card
+string fmt_somministrazione
 string formula_vincoli
 string hint_altezza
 string hint_eta

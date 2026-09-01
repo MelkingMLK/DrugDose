@@ -1,38 +1,43 @@
 package it.uninsubria.drugdose.model
 
 enum class CalculationType {
-    WEIGHT_BASED,
-    BSA_BASED,
-    FIXED_DOSE,
+    PER_KG,
+    PER_BSA,
+    FIXED,
     WEIGHT_BRACKETS
 }
 
-data class WeightBracket(
-    val minWeight: Double,
-    val maxWeight: Double,
-    val dose: Double
+data class AvailableForm(
+    val formType: String,
+    val strengthValue: Double,
+    val strengthUnit: String,
+    val isDivisible: Boolean
 )
 
-data class Indication(
-    val name: String,
-    val calculationType: CalculationType,
-    val dosePerUnit: Double? = null,
+data class WeightBracket(
+    val minWeightKg: Double,
+    val maxWeightKg: Double,
+    val doseValue: Double,
     val unit: String,
-    val maxDose: Double? = null,
-    val fixedDose: Double? = null,
-    val brackets: List<WeightBracket>? = null,
-    val pharmaceuticalForm: String? = null,
-    val formMultiplier: Double? = null,
-    val roundingStep: Double? = null,
-    val minWeight: Double? = null,
-    val maxWeight: Double? = null,
-    val minAge: Int? = null,
-    val maxAge: Int? = null,
-    val notes: String? = null
+    val tabletsCount: Int
 )
 
 data class Drug(
     val id: String,
     val name: String,
-    val indications: List<Indication>
+    val clinicalIndication: String,
+    val calculationType: CalculationType,
+    val targetUnit: String,
+    val unitDose: Double,
+    val unitDoseOriginal: String,
+    val maxTotalDose: Double,
+    val minAgeYears: Double,
+    val maxAgeYears: Double = 120.0, // Default a 120 anni se assente nel JSON
+    val minWeightKg: Double,
+    val maxWeightKg: Double,
+    val availableForm: AvailableForm,
+    val weightBrackets: List<WeightBracket> = emptyList(),
+    val administrationInfo: String,
+    val alerts: List<String>,
+    val source: String
 )
