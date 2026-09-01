@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import it.uninsubria.drugdose.MainActivity
+import it.uninsubria.drugdose.ui.DrugListScreen
 import it.uninsubria.drugdose.ui.HomeScreen
 
 @Composable
@@ -20,7 +21,6 @@ fun AppNavigation(context: Context) {
         composable(Screen.Home.route) {
             HomeScreen(
                 onNavigateToCalculator = {
-                    // Avvio della MainActivity (Calcolatore basato su Layout XML)
                     context.startActivity(Intent(context, MainActivity::class.java))
                 },
                 onNavigateToDrugList = {
@@ -32,11 +32,16 @@ fun AppNavigation(context: Context) {
             )
         }
 
-        // Placeholder per le fasi successive
+        // Rotta Fase 3 (Lista Farmaci LazyColumn)
         composable(Screen.DrugList.route) {
-            // Verrà implementata nella Fase 3 (LazyColumn)
+            DrugListScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
 
+        // Placeholder per Fase 4
         composable(Screen.SavedDosages.route) {
             // Verrà implementata nella Fase 4 (Database locale)
         }
