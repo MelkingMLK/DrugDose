@@ -11,13 +11,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import it.uninsubria.drugdose.R
+import it.uninsubria.drugdose.data.JsonHistoryManager
+import it.uninsubria.drugdose.data.SavedDosage
 import it.uninsubria.drugdose.model.CalculationType
+import it.uninsubria.drugdose.model.DoseCalculator
 import it.uninsubria.drugdose.model.Drug
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var historyManager: JsonHistoryManager
 
     private lateinit var spinnerDrug: AutoCompleteTextView
     private lateinit var spinnerIndication: AutoCompleteTextView
@@ -32,13 +38,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Abilita la Toolbar con freccia indietro verso la Home
+        val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        historyManager = JsonHistoryManager(this)
+
         initViews()
         setupObservers()
         setupListeners()
 
         viewModel.loadDrugs()
     }
-
+    override fun onSupportNavigateUp(): Boolean {
+        finish() // Chiude MainActivity e ritorna regolarmente su HomeActivity nello stack
+        return true
+    }
     private fun initViews() {
         spinnerDrug = findViewById(R.id.spinnerDrug)
         spinnerIndication = findViewById(R.id.spinnerIndication)
@@ -51,6 +68,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
+        // 1. Popolamento Dropdown Farmaci
         viewModel.drugs.observe(this) { drugList ->
             if (drugList.isNotEmpty()) {
                 val drugNames = drugList.map { it.name }
@@ -61,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                     val selectedDrug = drugList[position]
                     viewModel.selectDrug(selectedDrug)
 
+                    // Popola automaticamente il menu dell'indicazione clinica
                     val indicationAdapter = ArrayAdapter(
                         this,
                         android.R.layout.simple_dropdown_item_1line,
@@ -72,10 +91,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // 2. Aggiornamento Info Card e Visibilità Altezza
         viewModel.selectedDrug.observe(this) { drug ->
             if (drug != null) {
                 updateDrugCardInfo(drug)
                 tvResult.text = getString(R.string.risultato)
+                tvResult.setTextColor(getColor(R.color.text_main))
             } else {
                 tvFormulaInfo.text = getString(R.string.formula_vincoli)
                 spinnerIndication.setText("", false)
@@ -83,8 +104,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // 3. Risultato del Calcolo e Scrittura su JSON
         viewModel.calculationResult.observe(this) { result ->
             if (result != null) {
+                tvResult.setTextColor(getColor(R.color.text_main))
+
                 val doseFormatted = if (result.theoreticalDose % 1.0 == 0.0) {
                     result.theoreticalDose.toInt().toString()
                 } else {
@@ -108,11 +132,24 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 tvResult.text = out
+
+                // Persistenza su file JSON
+                val currentDrug = viewModel.selectedDrug.value
+                val weight = etWeight.text.toString().toDoubleOrNull() ?: 0.0
+                val height = etHeight.text.toString().toDoubleOrNull() ?: 0.0
+                val age = etAge.text.toString().toDoubleOrNull() ?: 0.0
+
+                if (currentDrug != null) {
+                    saveCalculationToHistory(currentDrug, result, weight, height, age)
+                }
             }
         }
 
+        // 4. Gestione Errori di Validazione
         viewModel.validationError.observe(this) { errorMsg ->
             if (errorMsg != null) {
+                tvResult.text = errorMsg
+                tvResult.setTextColor(getColor(R.color.medical_error))
                 Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
             }
         }
@@ -164,5 +201,30 @@ class MainActivity : AppCompatActivity() {
 
             viewModel.calculate(weight, height, age)
         }
+    }
+
+    private fun saveCalculationToHistory(
+        drug: Drug,
+        result: DoseCalculator.CalculationResult,
+        weight: Double,
+        height: Double,
+        age: Double
+    ) {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val timestamp = dateFormat.format(Date())
+
+        val record = SavedDosage(
+            id = System.currentTimeMillis(),
+            drugName = drug.name,
+            indication = drug.clinicalIndication,
+            patientWeight = weight,
+            patientHeight = height,
+            patientAge = age,
+            theoreticalDose = "${result.theoreticalDose} ${result.targetUnit}",
+            practicalDose = result.practicalDoseText,
+            timestamp = timestamp
+        )
+
+        historyManager.saveDosage(record)
     }
 }

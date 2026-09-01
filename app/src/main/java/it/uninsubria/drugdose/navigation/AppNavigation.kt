@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import it.uninsubria.drugdose.MainActivity
 import it.uninsubria.drugdose.ui.DrugListScreen
 import it.uninsubria.drugdose.ui.HomeScreen
+import it.uninsubria.drugdose.ui.SavedDosagesScreen
 
 @Composable
 fun AppNavigation(context: Context) {
@@ -32,7 +33,6 @@ fun AppNavigation(context: Context) {
             )
         }
 
-        // Rotta Fase 3 (Lista Farmaci LazyColumn)
         composable(Screen.DrugList.route) {
             DrugListScreen(
                 onNavigateBack = {
@@ -41,9 +41,13 @@ fun AppNavigation(context: Context) {
             )
         }
 
-        // Placeholder per Fase 4
+        // Rotta Fase 4
         composable(Screen.SavedDosages.route) {
-            // Verrà implementata nella Fase 4 (Database locale)
+            SavedDosagesScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
