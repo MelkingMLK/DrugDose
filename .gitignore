@@ -1,0 +1,12 @@
+# Cartelle di compilazione (dove si generavano i percorsi locali del computer)
+build/
+app/build/
+
+# File e cartelle locali di Android Studio
+.idea/
+.gradle/
+local.properties
+
+# File di sistema di macOS e Windows
+.DS_Store
+Thumbs.db
